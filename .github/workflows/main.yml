@@ -28,7 +28,7 @@ jobs:
           password: ${{ secrets.PASSWORD }}
           script: |
             node -v && npm -v
-            sudo rm -r react-deploy
+            
             git clone https://github.com/arunavauni-03/react-deploy.git
             cd react-deploy/
             npm install
