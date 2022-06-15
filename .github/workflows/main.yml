@@ -34,7 +34,7 @@ jobs:
             npm install
             npm run build 
             pm2 serve build 8082 --spa  
-            pm2 restart
+            
   commenting:
   
    runs-on: ubuntu-latest
