@@ -45,9 +45,9 @@ jobs:
         with:
           message: |
               # 😎  Deployment status 
-            ### ✅ Deployment is successful. 
-            ### 👉 All things are ok ,  successfully deployed to sever you can check it out on the given link .
-            ### 👉 [Let's Go ](206.189.128.14)
+              ### ✅ Deployment is successful. 
+              ### 👉 All things are ok ,  successfully deployed to sever you can check it out on the given link .
+              ### 👉 [Let's Go ](206.189.128.14)
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           repo-token-user-login: 'github-actions[bot]' # The user.login for temporary GitHub tokens
           allow-repeats: false # This is the default
