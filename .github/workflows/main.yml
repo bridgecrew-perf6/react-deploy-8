@@ -1,0 +1,55 @@
+name: Droplet Deploy
+
+on:
+  #   push:
+  #     branches: [ "master" ]
+  pull_request:
+    branches: ["master"]
+
+jobs:
+  response:
+    name: echo
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: echo job started
+        run: echo job starting!
+  ssh_server:
+    environment: PROD
+    needs: ["response"]
+    name: ssh-server
+    runs-on: ubuntu-latest
+    steps:
+      - name: executing remote ssh commands using password
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.PASSWORD }}
+          script: |
+            node -v && npm -v
+            sudo rm -r react-deploy
+            git clone https://github.com/arunavauni-03/react-deploy.git
+            cd react-deploy/
+            npm install
+            npm run build 
+            pm2 serve build 8082 --spa  
+            pm2 restart
+  commenting:
+  
+   runs-on: ubuntu-latest
+   needs: ["response","ssh_server"]
+   if: ${{ always() && contains(join(needs.*.result, ','), 'success') }}
+   steps:
+      - uses: mshick/add-pr-comment@v1
+        with:
+          message: |
+              # 😎  Deployment status 
+            ### ✅ Deployment is successful. 
+            ### 👉 All things are ok ,  successfully deployed to sever you can check it out on the given link .
+            ### 👉 [Let's Go ](206.189.128.14)
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          repo-token-user-login: 'github-actions[bot]' # The user.login for temporary GitHub tokens
+          allow-repeats: false # This is the default
+        env:
+           NEEDS: ${{ toJSON(needs) }}   
